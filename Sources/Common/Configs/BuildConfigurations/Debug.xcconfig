@@ -1,0 +1,14 @@
+//
+//  Debug.xcconfig
+//  AppConfig
+//
+
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "./Pods/Target Support Files/Pods-AppConfig/Pods-AppConfig.debug.xcconfig"
+
+PRODUCT_NAME = AppConfig Debug
+PRODUCT_BUNDLE_IDENTIFIER = com.meobeo.appconfig.debug
+BUNDLE_SHORT_VERSION_STRING = 1.0.0
+BUNDLE_VERSION = 1
+OTHER_SWIFT_FLAGS = -D DEBUG

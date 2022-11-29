@@ -1,0 +1,91 @@
+name: AppConfig
+configs:
+  Debug: debug
+  Staging: staging
+  Release: release
+options:
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  indentWidth: 4
+  tabWidth: 4
+  bundleIdPrefix: "com.meobeo"
+settings:
+  PRODUCT_BUNDLE_IDENTIFIER: $(PRODUCT_BUNDLE_IDENTIFIER)
+targets:
+  AppConfig:
+    type: application
+    platform: iOS
+    deploymentTarget: "12.0"
+    sources: Sources
+    configFiles:
+      Debug: Sources/Common/Configs/BuildConfigurations/Debug.xcconfig
+      Staging: Sources/Common/Configs/BuildConfigurations/Staging.xcconfig
+      Release: Sources/Common/Configs/BuildConfigurations/Release.xcconfig
+    settings:
+      INFOPLIST_FILE: Sources/Common/Resources/Info.plist
+      SWIFT_VERSION: "5.0"
+      SWIFT_OBJC_BRIDGING_HEADER: Sources/Common/Resources/AppConfig-Bridging-Header.h
+      CODE_SIGN_STYLE: "Manual"
+      UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+      UILaunchStoryboardName: LaunchScreen
+      VALIDATE_WORKSPACE: YES
+      CODE_SIGN_ENTITLEMENTS: Sources/Common/Resources/AppConfig.entitlements
+    preBuildScripts:
+      - name: SwiftGen
+        script: |
+          mint run SwiftGen/SwiftGen@6.5.1 swiftgen
+    postCompileScripts:
+      - name: Swiftlint
+        script: |
+          mint run realm/SwiftLint@0.49.1 swiftlint
+      - name: GoogleServiceInfo
+        script: |
+          PATH_TO_GOOGLE_PLISTS="${PROJECT_DIR}/Sources/Common/Configs/GoogleServices"
+          case "${CONFIGURATION}" in
+          "Debug" )
+          cp -r "$PATH_TO_GOOGLE_PLISTS/GoogleService-Info-Debug.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist" ;;
+          "Staging" )
+          cp -r "$PATH_TO_GOOGLE_PLISTS/GoogleService-Info-Staging.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist" ;;
+          "Release" )
+          cp -r "$PATH_TO_GOOGLE_PLISTS/GoogleService-Info-Release.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist" ;;
+          *)
+          ;;
+          esac
+    postBuildScripts:
+      - name: Crashlytics
+        script: |
+          "${PROJECT_DIR}/scripts/run"
+        inputFiles:
+          - $(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
+          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
+  # AppConfigTests:
+  #   type: bundle.unit-test
+  #   platform: iOS
+  #   settings:
+  #     TEST_HOST: $(BUILT_PRODUCTS_DIR)/AppConfig Debug.app/AppConfig Debug
+  #     LD_RUNPATH_SEARCH_PATHS: $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' $(FRAMEWORK_SEARCH_PATHS)
+  #     IPHONEOS_DEPLOYMENT_TARGET: 12.0
+  #   sources: SourcesTests
+  #   dependencies:
+  #     - target: AppConfig
+schemes:
+  AppConfig:
+    build:
+      targets:
+        AppConfig: all
+    run:
+      config: Debug
+    # test:
+    #   config: Debug
+    #   gatherCoverageData: true
+    #   targets:
+    #     - name: AppConfigTests
+    #       parallelizable: false
+    #       randomExecutionOrder: true
+    profile:
+      config: Debug
+    analyze:
+      config: Debug
+    archive:
+      config: Release
