@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [develop, master]
+
+jobs:
+  build:
+    # Only when PR is closed and merged is true → That is, it starts only when merged
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Call CircleCI API
+        run: |
+          curl \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -H "Circle-Token: ${{ secrets.CIRCLE_TOKEN }}" \
+          -d '{ "branch": "master", "parameters": { "build_variant": "dev", "task": "deploy", "pull_request_title": "${{ github.event.pull_request.title }}" } }' \
+          https://circleci.com/api/v2/project/github/${{ github.event.repository.full_name }}/pipeline
