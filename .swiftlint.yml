@@ -104,7 +104,7 @@ opt_in_rules: # some rules are only opt-in
   - overridden_super_call
   - override_in_extension
   - pattern_matching_keywords
-  - prefixed_toplevel_constant
+  # - prefixed_toplevel_constant
   # - private_action
   # - private_outlet
   - private_over_fileprivate
