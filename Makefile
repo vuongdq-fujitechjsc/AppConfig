@@ -36,9 +36,9 @@ copyFrameworks:
 .PHONY: xcodetest
 xcodetest:
 	xcodebuild \
-	-workspace "My Project.xcworkspace" \
-	-scheme "My Project" \
-	-destination 'platform=iOS Simulator,name=iPhone 13 Pro Max' \
+	-workspace "AppConfig.xcworkspace" \
+	-scheme "AppConfig" \
+	-destination 'platform=iOS Simulator,name=iPhone 13,OS=15.0' \
 	-derivedDataPath "build" \
 	-enableCodeCoverage YES \
 	test \

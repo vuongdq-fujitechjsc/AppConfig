@@ -59,16 +59,16 @@ targets:
         inputFiles:
           - $(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
           - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
-  # AppConfigTests:
-  #   type: bundle.unit-test
-  #   platform: iOS
-  #   settings:
-  #     TEST_HOST: $(BUILT_PRODUCTS_DIR)/AppConfig Debug.app/AppConfig Debug
-  #     LD_RUNPATH_SEARCH_PATHS: $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' $(FRAMEWORK_SEARCH_PATHS)
-  #     IPHONEOS_DEPLOYMENT_TARGET: 12.0
-  #   sources: SourcesTests
-  #   dependencies:
-  #     - target: AppConfig
+  AppConfigTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      TEST_HOST: $(BUILT_PRODUCTS_DIR)/AppConfig Debug.app/AppConfig Debug
+      LD_RUNPATH_SEARCH_PATHS: $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' $(FRAMEWORK_SEARCH_PATHS)
+      IPHONEOS_DEPLOYMENT_TARGET: 12.0
+    sources: SourcesTests
+    dependencies:
+      - target: AppConfig
 schemes:
   AppConfig:
     build:
@@ -76,13 +76,13 @@ schemes:
         AppConfig: all
     run:
       config: Debug
-    # test:
-    #   config: Debug
-    #   gatherCoverageData: true
-    #   targets:
-    #     - name: AppConfigTests
-    #       parallelizable: false
-    #       randomExecutionOrder: true
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - name: AppConfigTests
+          parallelizable: false
+          randomExecutionOrder: true
     profile:
       config: Debug
     analyze:
