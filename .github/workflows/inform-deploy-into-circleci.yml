@@ -3,7 +3,7 @@ name: Deploy
 on:
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [develop, master]
 
 jobs:
   build:
