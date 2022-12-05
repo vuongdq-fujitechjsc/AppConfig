@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - name: CircleCI Trigger on Pull Request
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        with:
+          GHA_Action: auto-deploy
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
