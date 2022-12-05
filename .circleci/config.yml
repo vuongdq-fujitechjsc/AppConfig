@@ -2,6 +2,11 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+parameters:
+  GHA_Action:
+    type: string
+    default: ""
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -31,5 +36,6 @@ jobs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   build-and-test-workflow:
+    when: << pipeline.parameters.GHA_Action >>
     jobs:
       - build-and-test
