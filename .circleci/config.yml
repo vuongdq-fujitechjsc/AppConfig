@@ -47,7 +47,6 @@ workflows:
   build-and-test-workflow:
     when: 
      and:
-        - equal: [ "develop", << pipeline.git.branch >> ]
         - equal: [ "deploy", << pipeline.parameters.GHA_Meta >> ]
     jobs:
       - build-and-test
