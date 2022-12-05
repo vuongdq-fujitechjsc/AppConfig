@@ -2,18 +2,14 @@ name: CircleCI Trigger on Pull Request
 
 on:
   pull_request:
-    types: [opened]
+    types: [closed]
     branches: [develop, master]
-
-    # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 jobs:
   build:
     # Only when PR is closed and merged is true → That is, it starts only when merged
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-
     steps:
       - name: CircleCI Trigger on Pull Request
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
