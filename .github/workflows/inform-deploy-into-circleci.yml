@@ -1,9 +1,12 @@
-name: Deploy
+name: CircleCI Trigger on Pull Request
 
 on:
   pull_request:
     types: [opened]
     branches: [develop, master]
+
+    # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
