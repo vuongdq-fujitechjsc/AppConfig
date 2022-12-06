@@ -41,35 +41,35 @@ jobs:
           name: "Run Unit test"
           command: "bundle exec fastlane unittest --env debug"
 
-    deploy-st:
-      macos: 
-        xcode: 14.0.1
-      steps:
-        - checkout
-        - run:
+  deploy-st:
+    macos: 
+      xcode: 14.0.1
+    steps:
+      - checkout
+      - run:
           name: "Install"
           command: "make"
-        - run:
-            name: "Setup Certificate"
-            command: "make setupCertificate"
-        - run:
-            name: "Deploy Testflight For ST"
-            command: "make exportTestFlightForST"
+      - run:
+          name: "Setup Certificate"
+          command: "make setupCertificate"
+      - run:
+          name: "Deploy Testflight For ST"
+          command: "make exportTestFlightForST"
 
-    deploy-product:
-      macos: 
-        xcode: 14.0.1
-      steps:
-        - checkout
-        - run:
+  deploy-product:
+    macos: 
+      xcode: 14.0.1
+    steps:
+      - checkout
+      - run:
           name: "Install"
           command: "make"
-        - run:
-            name: "Setup Certificate"
-            command: "make setupCertificate"
-        - run:
-            name: "Deploy Testflight For Product"
-            command: "make exportTestFlightForProduct"
+      - run:
+          name: "Setup Certificate"
+          command: "make setupCertificate"
+      - run:
+          name: "Deploy Testflight For Product"
+          command: "make exportTestFlightForProduct"
     
 workflows:
   # Workflow: build for any PR 
