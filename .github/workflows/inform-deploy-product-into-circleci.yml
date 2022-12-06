@@ -1,9 +1,9 @@
-name: CircleCI Trigger on Pull Request
+name: CircleCI Deplop Product
 
 on:
   pull_request:
     types: [closed]
-    branches: [develop, master]
+    branches: [master]
 
 jobs:
   build:
@@ -11,9 +11,9 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: CircleCI Trigger on Pull Request
+      - name: CircleCI trigger deploy product on pull request
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
         with:
-          GHA_Meta: deploy
+          GHA_Meta: deploy-product
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}

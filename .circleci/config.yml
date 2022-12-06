@@ -19,7 +19,7 @@ parameters:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build-and-test:
+  build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     macos:
@@ -41,12 +41,54 @@ jobs:
           name: "Run Unit test"
           command: "bundle exec fastlane unittest --env debug"
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+    deploy-st:
+      macos: 
+        xcode: 14.0.1
+      steps:
+        - checkout
+        - run:
+          name: "Install"
+          command: "make"
+        - run:
+            name: "Setup Certificate"
+            command: "make setupCertificate"
+        - run:
+            name: "Deploy Testflight For ST"
+            command: "make exportTestFlightForST"
+
+    deploy-product:
+      macos: 
+        xcode: 14.0.1
+      steps:
+        - checkout
+        - run:
+          name: "Install"
+          command: "make"
+        - run:
+            name: "Setup Certificate"
+            command: "make setupCertificate"
+        - run:
+            name: "Deploy Testflight For Product"
+            command: "make exportTestFlightForProduct"
+    
 workflows:
-  build-and-test-workflow:
+  # Workflow: build for any PR 
+  build:
+    jobs:
+      - build
+      
+  # Workflow: deploy to testflight of ST environment 
+  deploy-st:
     when: 
      and:
-        - equal: [ "deploy", << pipeline.parameters.GHA_Meta >> ]
+        - equal: [ "deploy-st", << pipeline.parameters.GHA_Meta >> ]
     jobs:
-      - build-and-test
+      - deploy-st
+
+  # Workflow: deploy to testflight of Product environment
+  deploy-product:
+    when: 
+     and:
+        - equal: [ "deploy-product", << pipeline.parameters.GHA_Meta >> ]
+    jobs:
+      - deploy-product
