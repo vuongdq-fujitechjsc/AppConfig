@@ -1,4 +1,4 @@
-name: SwiftLint with Danger
+name: SwiftLint
 
 on:
   pull_request:
@@ -8,13 +8,21 @@ on:
       - 'SourcesTests/**.swift'
 
 jobs:
-  Danger-Swift-with-SwiftLint:
+  SwiftLint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: "Run Danger"
-        uses: docker://ghcr.io/danger/danger-swift-with-swiftlint:3.14.0
+      - uses: actions/checkout@v1
+      - name: GitHub Action for SwiftLint
+        uses: norio-nomura/action-swiftlint@3.2.1
+      - name: GitHub Action for SwiftLint with --strict
+        uses: norio-nomura/action-swiftlint@3.2.1
         with:
-          args: --failOnErrors --no-publish-check
+          args: --strict
+      - name: GitHub Action for SwiftLint (Only files changed in the PR)
+        uses: norio-nomura/action-swiftlint@3.2.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DIFF_BASE: ${{ github.base_ref }}
+      - name: GitHub Action for SwiftLint (Different working directory)
+        uses: norio-nomura/action-swiftlint@3.2.1
+        env:
+          WORKING_DIRECTORY: Source

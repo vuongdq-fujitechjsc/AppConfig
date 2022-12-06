@@ -74,8 +74,12 @@ jobs:
 workflows:
   # Workflow: build for any PR 
   build:
+    when: 
+      and:
+          - equal: [ "build", << pipeline.parameters.GHA_Meta >> ]
     jobs:
       - build
+      
       
   # Workflow: deploy to testflight of ST environment  
   deploy-st:
